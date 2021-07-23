@@ -1,0 +1,56 @@
+<mat-toolbar color="primary" class="mat-elevation-z2">
+  <span>Movies Application</span>
+</mat-toolbar>
+
+<div class="d-flex justify-content-between p-5">
+  <!-- Movie List -->
+  <mat-card class="w-50 me-2">
+    <mat-card-content>
+      <mat-list role="list">
+        <div mat-subheader>Movies</div>
+        <mat-list-item *ngFor="let movie of movies" (click)="selectMovie(movie)" class="mat-list-option">
+          <h3 mat-line>{{movie.name}}</h3>
+          <p mat-line>{{movie.description}}</p>
+          <button
+            (click)="deleteMovie(movie.id); $event.stopImmediatePropagation();"
+            mat-icon-button
+            class="mat-pseudo-checkbox"
+            color="warn"
+          >
+            X
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Movie Details -->
+  <mat-card class="w-50 ms-2">
+    <mat-card-header>
+      <mat-card-title *ngIf="!selectedMovie.id; else updateTitle">Add A Movie</mat-card-title>
+      <ng-template #updateTitle>
+        <mat-card-title>Updating {{selectedMovie.name}}</mat-card-title>
+      </ng-template>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="d-flex flex-column" #f="ngForm" (ngSubmit)="save(f.value)">
+        <input hidden [(ngModel)]="selectedMovie.id" name="id">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input [(ngModel)]="selectedMovie.name" name="name" matInput placeholder="Name">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <input [(ngModel)]="selectedMovie.description" name="description" matInput placeholder="Description">
+        </mat-form-field>
+
+        <div class="d-flex justify-content-end">
+          <button color="primary" class="me-2" type="submit" mat-stroked-button>{{selectedMovie.id ? 'Update' : 'Submit'}}</button>
+          <button color="accent" (click)="reset()" type="reset" mat-stroked-button>Cancel</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
